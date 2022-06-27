@@ -1,4 +1,4 @@
-# TIMERS YAML
+# Timers
 
 If you are using the package version, this is not needed, as the timer is included in the package.  However, if you are using a split configuration or still have everything in your primary configuration.yaml file, you will need to add this timer.
 
