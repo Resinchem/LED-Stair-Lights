@@ -12,3 +12,8 @@ The provided code is for a Wemos D1 mini with the motion detector connected to p
 ### Testing
 I recommend that after you build your motion detectors and upload your ESPHome code, you test the sensors before installing.  The easiest way to test is to power up the motion detectors and open the Developer Tools in Home Assistant and select the States tab.
 
+![test_motion](https://user-images.githubusercontent.com/55962781/176053522-59de0cba-2749-401a-af24-ad573af78cd4.jpg)
+
+Filter the entitites by entering the beginning part of your binary sensor name(s) (binary_sensor.stair_motion if you used the defaults - if you used a different name, substitute that until you see your sensors).  Wave your hand or move in front of the motion detectors.  The state should change from "off" to "on", then return to "off" a few seconds after motion stops.  If this occurs, then everything is good with the motion detectors and they are ready to install.  If the state does not change (remains off), then check your wiring on the controller and assure you are using the same GPIO pin on the controller as stated in the ESPHome YAML.
+
+If the state shows "unavailable", Home Assistant cannot see the sensors.  Check your ESPHome code and the wiring of the device(s).
