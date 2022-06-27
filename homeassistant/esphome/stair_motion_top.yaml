@@ -1,0 +1,38 @@
+esphome:
+  name: stair_motion_top
+  platform: ESP8266
+  board: d1_mini
+
+wifi:
+  ssid: "your_wifi_name"
+  password: "your_wifi_password"
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "StairMotionTop"
+    password: "optional"  # Change, or leave blank for no password
+
+captive_portal:
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+  password: "optional"  # Change, or leave blank or remove line for no password
+
+ota:
+  password: "optional"  # Change, or leave blank or remove line for no password
+
+# ======================================================================
+#  This section should be added to any auto-generated code created above
+# ======================================================================
+binary_sensor:
+  - platform: gpio
+    pin: D6
+    name: "Stair Motion Top"
+    device_class: motion
+
+switch:
+  - platform: restart
+    name: "Stair Motion Top Restart"

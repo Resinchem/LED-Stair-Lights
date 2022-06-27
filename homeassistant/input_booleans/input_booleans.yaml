@@ -1,0 +1,6 @@
+# -------------------------------
+#  Input Boolean for Stair Lights
+# -------------------------------
+stair_auto_leds:
+  name: Stair Auto LEDs
+  initial: on

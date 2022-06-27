@@ -1,0 +1,148 @@
+#===================================
+# This version is for Home Assistant
+# release 2021.12 or later
+#===================================
+# BASEMENT STAIR LED LIGHTING WITH MOTION DETECTION
+# LED lighting is auto-on based on motion detection at top and bottom of stairs.
+# Initial motion at bottom, lights sequence up the stairs from the bottom.
+# Initial motion at top, lights sequence down the stairs from the top.
+# Sequence continues until opposite motion detector fires movement, turning lights off.
+# Defaults to 15 seconds before auto-shutoff if no futher motion detected.
+# Enable/disable automation via the input_boolean.stair_auto_leds
+# Entiies:
+#   light.stair_lights
+#   binary_sensor.stair_motion_top
+#   binary_sensor.stair_motion_bottom
+#
+#   HELPERS - must create these manually
+#   =====================================
+#   timer.stair_motion_timer
+#   input_boolean.stair_auto_leds
+#--------------------------------
+# Stair Lights On with Top Motion
+#--------------------------------
+- alias: Top Motion Lights On
+  trigger:
+    platform: state
+    entity_id: binary_sensor.stair_motion_top
+    from: 'off'
+    to: 'on'
+  condition:
+    - condition: state
+      entity_id: input_boolean.stair_auto_leds
+      state: "on"
+    - condition: state
+      entity_id: light.stair_lights
+      state: 'off'
+  action:
+    - service: number.set_value
+      data:
+        entity_id: number.stairs_speed
+        value: '220'
+    - service: switch.turn_on
+      data:
+        entity_id: switch.stairs_reverse
+    - service: light.turn_on
+      data:
+        entity_id: light.stair_lights
+        rgb_color: [255,255,255]
+        effect: "Wipe"
+    - service: timer.start
+      data:
+        entity_id: timer.stair_motion_timer
+        duration: '00:00:15'
+#---------------------------------
+# Stair Lights Off with Top Motion
+#---------------------------------
+- alias: Top Motion Lights Off
+  trigger:
+    platform: state
+    entity_id: binary_sensor.stair_motion_top
+    from: 'off'
+    to: 'on'
+  condition:
+    - condition: state
+      entity_id: light.stair_lights
+      state: 'on'
+    - condition: state
+      entity_id: input_boolean.stair_auto_leds
+      state: "on"
+  action:
+    - service: light.turn_off
+      entity_id: light.stair_lights
+    
+#-----------------------------------
+# Stair Lights on with Bottom Motion
+#-----------------------------------
+- alias: Bottom Motion Lights On
+  trigger:
+    platform: state
+    entity_id: binary_sensor.stair_motion_bottom
+    from: 'off'
+    to: 'on'
+  condition:
+    - condition: state
+      entity_id: input_boolean.stair_auto_leds
+      state: "on"
+    - condition: state
+      entity_id: light.stair_lights
+      state: 'off'
+  action:
+    - service: number.set_value
+      data:
+        entity_id: number.stairs_speed
+        value: '220'
+    - service: switch.turn_off
+      data:
+        entity_id: switch.stairs_reverse
+    - service: light.turn_on
+      data:
+        entity_id: light.stair_lights
+        rgb_color: [255,255,255]
+        effect: "Wipe"    
+    - service: timer.start
+      data:
+        entity_id: timer.stair_motion_timer
+        duration: '00:00:15'
+
+#------------------------------------
+# Stair Lights off with Bottom Motion
+#------------------------------------
+- alias: Bottom Motion Lights Off
+  trigger:
+    platform: state
+    entity_id: binary_sensor.stair_motion_bottom
+    from: 'off'
+    to: 'on'
+  condition:
+    - condition: state
+      entity_id: light.stair_lights
+      state: 'on'
+    - condition: state
+      entity_id: input_boolean.stair_auto_leds
+      state: "on"
+  action:
+    - service: light.turn_off
+      entity_id: light.stair_lights
+      
+#-----------------------
+# Stair Timer Expiration
+#-----------------------
+- alias: Stair Timer Expires
+  trigger:
+    platform: event
+    event_type: timer.finished
+    event_data:
+      entity_id: timer.stair_motion_timer
+  condition:
+    # Assure no motion occuring
+    - condition: state
+      entity_id: binary_sensor.stair_motion_top
+      state: 'off'
+    - condition: state
+      entity_id: binary_sensor.stair_motion_bottom
+      state: 'off'
+  action:
+    # Reset and turn off lights
+    - service: light.turn_off
+      entity_id: light.stair_lights
