@@ -11,3 +11,14 @@ If you are using a single configuration.yaml file, then some work is needed.  Th
 automation:
 ```
 section and **each line must be indented by exactly two spaces**.  If you are using a single configuration.yaml file, or are not comfortable editing yaml files, it is recommended that you use the package version, or create the automations using the Home Assistant UI Editor, as I cover in the following video: [Recreate a YAML automation using the Home Assistant Automation Editor](https://youtu.be/F3YjWCs7Czc).  This video actually walks you through creating both the helpers and automations for the stair lighting system using the UI editor instead of editing yaml files.
+
+### If your lights are 'reversed' when activated
+As long as your 'top sensor' is at the top of the stairs and the 'bottom sensor' is at the bottom, the automation should work as is.  However, if you find that the light direction is reversed from what you want, it is an easy fix.
+
+If you are using the newer file (for 2022.12 and later) simply edit the automations for 'Top Motion Lights On' and 'Bottom Motion Lights On'.  Locate the service call for `switch.turn_on` or `switch.turn_off` with an entity of `switch.stairs_reverse' and set the '.turn_on' or '.turn_off' to the opposite value.  This will reverse the direction of the lights when the motion sensor detects motion.
+
+For the older version of the automation (_old), locate the same automations and look for the `reverse` action and toggle to either `true` or `false` to change the dirction.
+
+### Changing the speed, color, brightness or effect
+You can also adjust the speed, color, brightness and/or effect of the lights by editing these same sections of the automations.  To change brightness, add a `brightness:` property under the light.turn_on action and set it to a value between 0-255.  In lieu of a brightness setting, the brightness as last used or set via the WLED app will be used.
+
