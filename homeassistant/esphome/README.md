@@ -2,7 +2,7 @@
 
 This folder contains the YAML code for the ESPHome Motion Detectors.  
 
-By default, if you use the ESPHome wizard, the top sections of the files will be auto-generated for you (e.g. wifi credentials, etc.).  If this is the case, you only need to add the code for the binary_sensor and switch to this generated code.  If you change the name for the binary sensor, you must also update the automations to use this new name.
+By default, if you use the ESPHome wizard, the top sections of the files will be auto-generated for you (e.g. wifi credentials, etc.).  If this is the case, you only need to add the code for the binary_sensor and switch to this generated code.  If you change the name for the binary sensor, you must also update the automations to use this new name.  Technically, the siwtch entity is optional but recommended.  This gives you a way to reboot the controller from Home Assistant if needed without power cycling the device.  This is especially handy if the power supply to your motion controls isn't readily accessible.
 
 If you manually create the ESPHome YAML, then update the wifi SSID and password to match your environment.  Update any other optional passwords, or leave blank for no password.
 
