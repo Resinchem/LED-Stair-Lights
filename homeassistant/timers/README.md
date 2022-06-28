@@ -4,7 +4,7 @@
 
 For a split configuration, simply add the contents to your timers.yaml file (or whatever file you are using for timers).
 
-If you are using a single configuration.yaml file, add the contents of this file under timer section (if you do not have a timer section, add it) and ***indent each line two spaces*** as follows:
+If you are using a single configuration.yaml file, add the contents of this file under timer section (if you do not have a timer section, add it) and ***indent the line two spaces*** as follows:
 ```
 timer:
   stair_lights_timer:
