@@ -9,3 +9,5 @@ This repository contains the Home Assistant automations and related ESPHome YAML
 - Blog Article: [Simple Motion-Activated LED Stair Lighting](https://resinchemtech.blogspot.com/2021/07/simple-motion-activated-led-stair.html)
 
 More information on installation of the code in Home Assistant can be found in the Home Assistant folder.
+
+This version does require Home Assistant.  For a standalone version that doesn't require Home Assistant or any other hubs or systems, albeit with few features and effects than this version, please see this repository: [Standalone Motion-Activated LED Controller](https://github.com/Resinchem/standalone-led-controller)
