@@ -8,3 +8,20 @@ If you haven't enabled packages and have some comfort level with yaml files, you
 
 1. Add a packages folder to your \config folder in your Home Assistant installation:
 
+![package_folder](https://user-images.githubusercontent.com/55962781/176063861-29fa8f9e-006c-4f18-a7ab-d58ecdb65dad.jpg)
+
+(You can name this folder anything you like, but substitute the name you used in the next step)
+
+2. Open your configuration.yaml file and add the following line somewhere under the top `homeassistant:` header:
+```
+homeassistant:
+...
+  packages: !include_dir_named packages
+...
+```
+
+3. Be sure to indent the 'packages' line by **exactly two spaces** and substitute the name of your folder at the end of the line if you named it something different.  Check your configuration file and restart Home Assistant using the Developer Tools YAML tab.
+
+Once packages are enabled, you can simply download and drop the package file included in this folder into your /packages folder.  If you did rename any of your entities, you will need to edit the package .yaml file to update those names.  Otherwise, you can just restart Home Assistant and all necessary helpers and automations will be installed and ready to use.  Otherwise, you do not need any of the other yaml within this repository (except the binary_sensor and switch sections of the ESPHome files).
+
+If you want to see the package process in more detail, please see the following video: [Home Assistant MQTT Changes & Moving to Packages](https://youtu.be/VhHzBXYkVhw). If you wish to skip the section on upcoming MQTT changes in Home Assistant, use the time links or jump to about the 10:00 minute mark in the video to see the step-by-step process for enabling and using packages.
