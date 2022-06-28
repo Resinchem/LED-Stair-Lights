@@ -14,4 +14,4 @@ Regardless of the installation process used, it is also **highly recommended** t
 
 ![testing_wled](https://user-images.githubusercontent.com/55962781/176062695-f623f256-86d7-4dc3-8d70-ba245ef58bfc.jpg)
 
-Resolve any hardware or integration issues before adding automations!
+***Resolve any hardware or integration issues before adding automations!***
