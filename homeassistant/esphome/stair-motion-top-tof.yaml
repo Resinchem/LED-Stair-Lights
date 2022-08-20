@@ -1,0 +1,93 @@
+esphome:
+  name: stair-motion-top-tof
+
+ESP8266:
+  board: d1_mini
+
+wifi:
+  ssid: "your_wifi_name"
+  password: "your_wifi_password"
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "StairMotionTop"
+    password: "optional"  # Change, or leave blank for no password
+
+captive_portal:
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+  password: "optional"  # Change, or leave blank or remove line for no password
+
+ota:
+  password: "optional"  # Change, or leave blank or remove line for no password
+
+# ======================================================================
+#  This section should be added to any auto-generated code created above
+# ======================================================================
+# the vl53l0x is i2c
+i2c:
+  scan: true
+
+##
+## The virutal break beam sensor.
+## The state of this will be controlled 
+## by breakbeam_sensor_dist's lambda as necessary.
+##
+binary_sensor:
+  - name: "Stair Motion Top"
+    id: breakbeam_sensor_top
+    platform: template
+    device_class: motion
+
+##
+## The actual sensor. 
+## This sensor's lambda will control the state of our 
+## virtual break beam sensor, breakbeam_sensor.
+##
+sensor:
+  - name: "Stair Top Sensor Dist"
+    id: breakbeam_sensor_top_dist
+    platform: vl53l0x
+    address: 0x29
+    update_interval: 0.1s
+    long_range: true
+    internal: true
+    #
+    # Only send a value back if breakbeam_sensor changes.
+    #
+    filters:
+      - lambda: !lambda |-
+          /**
+           * YOU MIGHT WANT TO CONFIGURE THIS.
+           * Distance below which to trip the virtual break beam sensor.
+           * '0.5' meters is about 20  inches.
+           */
+          static double minTripDistance = 0.55;
+          if (x <= minTripDistance) {
+            if (id(breakbeam_sensor_top).state == true) {
+              // Beam was already broken
+              return {};
+            }
+            // Beam was just broken
+            id(breakbeam_sensor_top).publish_state(true);
+            ESP_LOGI("breakbeam_sensor_top_dist", "Set breakbeam_sensor_top to Detected");
+            return {};
+          }
+          else {
+            if (id(breakbeam_sensor_top).state == false) {
+              // Beam was already un-broken
+              return {};
+            }
+            // Beam was just un-broken
+            id(breakbeam_sensor_top).publish_state(false);
+            ESP_LOGI("breakbeam_sensor_top_dist", "Set breakbeam_sensor_top to Cleared");
+            return {};
+          } 
+
+switch:
+  - platform: restart
+    name: "Stair Motion Top Restart"
