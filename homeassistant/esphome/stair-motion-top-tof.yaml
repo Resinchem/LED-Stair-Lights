@@ -67,13 +67,19 @@ sensor:
            * '0.5' meters is about 20  inches.
            */
           static double minTripDistance = 0.55;
+          // Adding a debouncing counter. Increases with every update_interval during the debouncing period
+          static int deBounce = 0;
           if (x <= minTripDistance) {
             if (id(breakbeam_sensor_top).state == true) {
               // Beam was already broken
+               // Increase the debouncing counter
+              deBounce++;
               return {};
             }
             // Beam was just broken
             id(breakbeam_sensor_top).publish_state(true);
+            // Reset the debouncing counter
+            deBounce = 0;
             ESP_LOGI("breakbeam_sensor_top_dist", "Set breakbeam_sensor_top to Detected");
             return {};
           }
@@ -83,6 +89,13 @@ sensor:
               return {};
             }
             // Beam was just un-broken
+            // Don't do anything during the deboucing period. A debouncing threshold of 10 means that it will take 10 * update_interval before the binary sensor will be cleared
+            // Change the value to anything that will prevent your sensor from resetting to early
+            if (deBounce < 10)
+            {
+              deBounce++;
+              return {};
+            }
             id(breakbeam_sensor_top).publish_state(false);
             ESP_LOGI("breakbeam_sensor_top_dist", "Set breakbeam_sensor_top to Cleared");
             return {};
